@@ -1,0 +1,14 @@
+[package]
+name = "telemetrust"
+version = "0.1.0"
+edition = "2018"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+chrono = { version = "0.4", features = ["serde", "rustc-serialize"] }
+csv = "1.1"
+serde = { version = "1.0.117", features = ["derive"]} 
+serde_derive = "1.0.117"
+itertools = "0.10.0"
+rulinalg = "0.4.2"
