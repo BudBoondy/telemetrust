@@ -1,4 +1,4 @@
-// HUBER method
+// Based on https://github.com/henry-dang/triangulation
 pub struct Huber;
 
 use super::*;

@@ -1,6 +1,6 @@
 // algorithm based on 
-//  https://www.movable-type.co.uk/scripts/latlong.html
-//  http://www.edwilliams.org/avform147.htm#Intersection
+// https://www.movable-type.co.uk/scripts/latlong.html
+// http://www.edwilliams.org/avform147.htm#Intersection
 
 use itertools::Itertools;
 pub struct EWAF;

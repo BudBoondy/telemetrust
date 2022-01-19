@@ -1,4 +1,4 @@
-// ANDREWS METHOD
+// Based on https://github.com/henry-dang/triangulation
 
 pub struct Andrew;
 
