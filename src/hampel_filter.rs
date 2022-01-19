@@ -57,7 +57,7 @@ impl MeanFilter for Vec<f64>{
 mod tests {
     use super::*;
     #[test]
-    fn test_hempel_vec_f64(){
+    fn test_hampel_vec_f64(){
         let vec_f64_odd = vec![2.0, 5.5, 7.4, 6.9, 10.2, 3.3, 8.8];
         assert_eq!((vec_f64_odd.average()*10.0).round()/10.0, 6.3);
         assert_eq!(vec_f64_odd.median(), 7.4);
