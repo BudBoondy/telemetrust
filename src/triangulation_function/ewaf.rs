@@ -19,9 +19,9 @@ pub fn great_circle(b: Bearing) -> Vec<f64> {
    great_circle
 }
 
-fn triangulate_bearings_pair(b1: &Bearing, b2: &Bearing) -> Result<Location, EqualAngleError> {
+fn triangulate_bearings_pair(b1: &Bearing, b2: &Bearing) -> Result<Location, TriangulationError> {
     if (b1.angle - b2.angle).abs() < 0.05{
-        return Err(super::EqualAngleError)
+        return Err(TriangulationError::EqualAngle)
     }
     let n1 = super::to_normalized_vector(b1.loc); 
     let angle1 = b1.angle.to_radians();
@@ -57,7 +57,7 @@ fn triangulate_bearings_pair(b1: &Bearing, b2: &Bearing) -> Result<Location, Equ
 }
 
 impl TriangulationFunction for EWAF{
-    fn triangulate(bearings: Vec<Bearing>) -> Result<Location, EqualAngleError> {
+    fn triangulate(bearings: Vec<Bearing>) -> Result<Location, TriangulationError> {
         let location_vec: Vec<Location> = bearings.into_iter()
         .combinations(2)
         .into_iter()
@@ -78,7 +78,7 @@ impl TriangulationFunction for EWAF{
         .collect();
 
         if location_vec.is_empty(){
-            return Err(EqualAngleError)
+            return Err(TriangulationError::NoTriangulation)
         }
         let location = fold_location_vec(location_vec);
         Ok(location)
@@ -106,12 +106,7 @@ mod tests {
     #[test]
     fn test_real_triangulation_inf(){
         let result = EWAF::triangulate(vec![Bearing{loc: Location{lat: 50.814781, lon: 8.769190}, angle: 45.0, name: "irrelevant".to_owned()}, Bearing{loc: Location{lat: 50.814781, lon: 8.799190}, angle: 45.0, name: "irrelevant".to_owned()}]);
-        match result{
-            Ok(_) => panic!("did not expect OK result"),
-            Err(_) => assert_eq!(true, true)
-        }
-        let expected = Err(EqualAngleError);
-        assert_eq!(expected, result);
+        assert!(result.is_err());
     }
 
     #[test]

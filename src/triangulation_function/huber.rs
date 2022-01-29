@@ -7,7 +7,7 @@ use rulinalg::vector::Vector;
 
 impl TriangulationFunction for Huber {
 
-    fn triangulate(b: Vec<Bearing>) -> Result<Location, EqualAngleError> {  
+    fn triangulate(b: Vec<Bearing>) -> Result<Location, TriangulationError> {  
       let y = b.iter().map(|y| y.loc.lon).collect::<Vec<f64>>();
       let x = b.iter().map(|x| x.loc.lat).collect::<Vec<f64>>();
       let bearings  = b.iter().map(|x| x.angle).collect::<Vec<f64>>();
@@ -30,7 +30,7 @@ impl TriangulationFunction for Huber {
       let b = Vector::new(vec![b_first, b_second]);
       let xy = match a.solve(b){
           Ok(x) => x,
-          Err(e) => {println!("ERROR {:?}", e); return Err(EqualAngleError)}
+          Err(_) => return Err(TriangulationError::UnsolvableEquation)
       };
 
       let mut x0 = xy[0];
@@ -91,7 +91,7 @@ impl TriangulationFunction for Huber {
 
     let xyn = match q.solve(p){
       Ok(n) => n,
-      Err(e) => {println!("ERROR QP {:?}", e); return Ok(Location{lat: x0, lon: y0});}
+      Err(_) => return Ok(Location{lat: x0, lon: y0}) // there is a solution, might not be optimal
     };
       x = xyn[0];
       y = xyn[1];
@@ -99,7 +99,7 @@ impl TriangulationFunction for Huber {
       counter += 1;
 
       if x.is_nan() || y.is_nan() || counter == 999{
-          return Ok(Location{lat: x0, lon: y0});
+        return Err(TriangulationError::NoTriangulation)
       }
     }
     Ok(Location{lat: x, lon: y})

@@ -7,7 +7,7 @@ use rulinalg::matrix::Matrix;
 use rulinalg::vector::Vector;
 
 impl TriangulationFunction for Andrew {
-    fn triangulate(b: Vec<Bearing>) -> Result<Location, EqualAngleError> {
+    fn triangulate(b: Vec<Bearing>) -> Result<Location, TriangulationError> {
         let y = b.iter().map(|y| y.loc.lon).collect::<Vec<f64>>();
         let x = b.iter().map(|x| x.loc.lat).collect::<Vec<f64>>();
         let bearings  = b.iter().map(|x| x.angle).collect::<Vec<f64>>();
@@ -30,7 +30,7 @@ impl TriangulationFunction for Andrew {
         let b = Vector::new(vec![b_first, b_second]);
         let xy = match a.solve(b){
             Ok(x) => x,
-            Err(e) => {println!("{:?}", e); return Err(EqualAngleError)}
+            Err(e) => {println!("{:?}", e); return Err(TriangulationError::UnsolvableEquation)}
         };
 
         let mut x0 = xy[0];
@@ -73,8 +73,7 @@ impl TriangulationFunction for Andrew {
             wi = div_vec(&psi_a, &t);
 
             if psi_a.iter().sum::<f64>() == 0.0 {
-                println!("{}", "psiA is 0");
-                return Err(EqualAngleError);
+                return Err(TriangulationError::UnsolvableState);
             }
             let di: Vec<f64> = (add_vec(&sub(&xi,x).iter().map(|val: &f64| val * val).collect::<Vec<f64>>(), &sub(&yi, y).iter().map(|val: &f64| val * val).collect::<Vec<f64>>())).iter().map(|val| val.sqrt()).collect::<Vec<f64>>();
             let di_pow3 = di.iter().map(|v| v * v * v).collect::<Vec<f64>>();
@@ -93,8 +92,8 @@ impl TriangulationFunction for Andrew {
             wi.iter().zip(s_star.iter().zip(zi.iter())).map(|(w, (s, z))| w * s * z).sum::<f64>(),
             -1_f64 * wi.iter().zip(c_star.iter().zip(zi.iter())).map(|(w, (c, z))| w * c * z).sum::<f64>()]);
             let xyn = match q.solve(p){
-            Ok(n) => n,
-            Err(_) => return Ok(Location{lat: x0 , lon: y0})
+                Ok(n) => n,
+                Err(_) => return Ok(Location{lat: x0 , lon: y0})
             };
             x = xyn[0];
             y = xyn[1];
@@ -102,7 +101,7 @@ impl TriangulationFunction for Andrew {
             counter += 1;
 
             if x.is_nan() || y.is_nan() || counter == 999{
-                return Ok(Location{lat: x0 , lon: y0})
+                return Err(TriangulationError::NoTriangulation)
             }
         }
         Ok(Location{lat: x, lon: y})
@@ -130,7 +129,7 @@ mod tests {
             Bearing{loc: Location{lat: -103.080, lon: 33.795}, name: "".to_owned(), angle: 51.0},
         ];
         // third test
-        assert_eq!(Location{lat: -103.07850, lon: 33.79587}, triangulate::<Andrew>(base_sample_two).unwrap());
+        assert!(triangulate::<Andrew>(base_sample_two).is_err());
 
         let base_sample_three: Vec<Bearing> = vec![
             Bearing{loc: Location{lat: -99.874, lon: 36.506}, name: "".to_owned(), angle: 137.0},

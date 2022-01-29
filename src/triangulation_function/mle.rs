@@ -7,7 +7,7 @@ use rulinalg::matrix::Matrix;
 use rulinalg::vector::Vector;
 
 impl TriangulationFunction for MLE {
-    fn triangulate(b: Vec<Bearing>) -> Result<Location, EqualAngleError> {
+    fn triangulate(b: Vec<Bearing>) -> Result<Location, TriangulationError> {
         let y = b.iter().map(|y| y.loc.lon).collect::<Vec<f64>>();
         let x = b.iter().map(|x| x.loc.lat).collect::<Vec<f64>>();
         let bearings  = b.iter().map(|x| x.angle).collect::<Vec<f64>>();
@@ -27,7 +27,7 @@ impl TriangulationFunction for MLE {
         let b = Vector::new(vec![si.iter().zip(zi.iter()).map(|(s, z)| s * z).sum(), -1_f64 * ci.iter().zip(zi.iter()).map(|(c, z)| c * z).sum::<f64>()]); 
         let xy = match a.solve(b){
             Ok(x) => x,
-            Err(e) => {println!("{:?}", e); return Err(EqualAngleError)} 
+            Err(_) => return Err(TriangulationError::UnsolvableEquation)
         };
         let mut x0 = xy[0];
         let mut y0 = xy[1];
@@ -64,7 +64,7 @@ impl TriangulationFunction for MLE {
             
             let xyn = match q.solve(p){
                 Ok(n) => n,
-                Err(e) => {println!("{:?}", e); return Err(EqualAngleError)} 
+                Err(_) => return Err(TriangulationError::UnsolvableEquation)
             };
             
             x = xyn[0];
@@ -73,7 +73,7 @@ impl TriangulationFunction for MLE {
             counter += 1;
             
             if x.is_nan() || y.is_nan() || counter == 999{ 
-                return Err(EqualAngleError)
+                return Err(TriangulationError::NoTriangulation)
             }
         }
         Ok(Location{lat: x, lon: y})

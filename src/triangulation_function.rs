@@ -10,15 +10,14 @@ pub mod andrews;
 const RADIUS: f64 = 6371000.0;
 
 pub trait TriangulationFunction{
-    fn triangulate(s: Vec<Bearing>) -> Result<Location, EqualAngleError>;
+    fn triangulate(s: Vec<Bearing>) -> Result<Location, TriangulationError>;
 }
 
-pub fn triangulate<F>(b: Vec<Bearing>) -> Result<Location, EqualAngleError>
+pub fn triangulate<F>(b: Vec<Bearing>) -> Result<Location, TriangulationError>
     where F: TriangulationFunction, {
             F::triangulate(b)
 }
 
-pub struct TriangulationError;
 impl fmt::Display for TriangulationError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "No triangulation.") 
@@ -31,19 +30,11 @@ impl fmt::Debug for TriangulationError {
     }
 }
 
-#[derive(PartialEq)]
-pub struct EqualAngleError;
-
-impl fmt::Display for EqualAngleError {
-    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "Points with the same bearing angle used for triangulation.") // user-facing output
-    }
-}
-
-impl fmt::Debug for EqualAngleError {
-    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{{ file: {}, line: {} }}", file!(), line!()) // programmer-facing output
-    }
+pub enum TriangulationError {
+    EqualAngle,
+    UnsolvableEquation,
+    UnsolvableState,
+    NoTriangulation
 }
 
 #[derive(Debug, Clone)]
@@ -221,10 +212,6 @@ fn sub(v1: &[f64], f: f64) -> Vec<f64>{
 
 fn round_to_one(v: f64) -> f64{
     (v * 10.0).round() / 10.0
-}
-
-fn round_to_three(v: f64) -> f64{
-    (v * 100.0).round() / 100.0
 }
 
 trait DegRad {
