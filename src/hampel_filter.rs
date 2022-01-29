@@ -44,9 +44,9 @@ impl MeanFilter for Vec<f64>{
         let median = self.median();
         let mad = gaussian_scale * self.clone().into_iter().map(|x| (x - median).abs()).collect::<Vec<f64>>().median();
         
-        for i in 0..self.len(){
-            if (self[i] - median) > 3.0*mad{
-                self[i] = median;
+        for item in self.into_iter(){
+            if (*item - median) > 3.0*mad{
+                *item = median;
             }
         }
         self.to_vec()
