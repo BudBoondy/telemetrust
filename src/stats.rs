@@ -1,8 +1,7 @@
-
 pub trait MeanFilter: Statistics {
     type Output;
     type Inner;
-    fn hampel_filter(&mut self) -> Self::Output;
+    fn hampel_filter(&self) -> Self::Output;
 }
 
 pub trait Statistics {
