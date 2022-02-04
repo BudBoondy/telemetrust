@@ -43,7 +43,6 @@ pub enum TriangulationError {
 pub struct Bearing {
     pub loc: Location,
     pub angle: f64,
-    pub name: String,
 }
 
 #[derive(Debug, Copy, Clone, Serialize, Deserialize)]

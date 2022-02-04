@@ -107,7 +107,6 @@ mod tests {
                         lon: 1.65139
                     },
                     angle: 333.3508,
-                    name: "irrelevant".to_owned()
                 },
                 &Bearing {
                     loc: Location {
@@ -115,7 +114,6 @@ mod tests {
                         lon: 1.7094
                     },
                     angle: 310.1414,
-                    name: "irrelevant".to_owned()
                 }
             )
             .unwrap()
@@ -138,7 +136,6 @@ mod tests {
                         lon: 8.769190
                     },
                     angle: 45.0,
-                    name: "irrelevant".to_owned()
                 },
                 &Bearing {
                     loc: Location {
@@ -146,7 +143,6 @@ mod tests {
                         lon: 8.799190
                     },
                     angle: 315.0,
-                    name: "irrelevant".to_owned()
                 }
             )
             .unwrap()
@@ -162,7 +158,6 @@ mod tests {
                     lon: 8.769190,
                 },
                 angle: 45.0,
-                name: "irrelevant".to_owned(),
             },
             Bearing {
                 loc: Location {
@@ -170,7 +165,6 @@ mod tests {
                     lon: 8.799190,
                 },
                 angle: 45.0,
-                name: "irrelevant".to_owned(),
             },
         ]);
         assert!(result.is_err());
@@ -186,7 +180,6 @@ mod tests {
                     lon: -1.7297
                 },
                 angle: 96.0,
-                name: "irrelevant".to_owned()
             })
             .iter()
             .map(|x| format!("{:.3}", x))

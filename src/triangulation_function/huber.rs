@@ -184,7 +184,6 @@ mod tests {
                     lat: -103.099,
                     lon: 33.774,
                 },
-                name: "".to_owned(),
                 angle: 322.0,
             },
             Bearing {
@@ -192,7 +191,6 @@ mod tests {
                     lat: -103.098,
                     lon: 33.774,
                 },
-                name: "".to_owned(),
                 angle: 296.0,
             },
             Bearing {
@@ -200,7 +198,6 @@ mod tests {
                     lat: -103.098,
                     lon: 33.775,
                 },
-                name: "".to_owned(),
                 angle: 290.0,
             },
         ];
@@ -220,7 +217,6 @@ mod tests {
                     lat: -103.080,
                     lon: 33.795,
                 },
-                name: "".to_owned(),
                 angle: 69.0,
             },
             Bearing {
@@ -228,7 +224,6 @@ mod tests {
                     lat: -103.080,
                     lon: 33.796,
                 },
-                name: "".to_owned(),
                 angle: 95.0,
             },
             Bearing {
@@ -236,7 +231,6 @@ mod tests {
                     lat: -103.080,
                     lon: 33.795,
                 },
-                name: "".to_owned(),
                 angle: 51.0,
             },
         ];
@@ -255,7 +249,6 @@ mod tests {
                     lat: -99.874,
                     lon: 36.506,
                 },
-                name: "".to_owned(),
                 angle: 137.0,
             },
             Bearing {
@@ -263,7 +256,6 @@ mod tests {
                     lat: -99.874,
                     lon: 36.500,
                 },
-                name: "".to_owned(),
                 angle: 51.0,
             },
             Bearing {
@@ -271,7 +263,6 @@ mod tests {
                     lat: -99.867,
                     lon: 36.5077,
                 },
-                name: "".to_owned(),
                 angle: 215.0,
             },
         ];
@@ -290,7 +281,6 @@ mod tests {
                     lat: -99.873,
                     lon: 36.5077,
                 },
-                name: "".to_owned(),
                 angle: 97.0,
             },
             Bearing {
@@ -298,7 +288,6 @@ mod tests {
                     lat: -99.867,
                     lon: 36.5077,
                 },
-                name: "".to_owned(),
                 angle: 220.0,
             },
             Bearing {
@@ -306,7 +295,6 @@ mod tests {
                     lat: -99.874,
                     lon: 36.5042,
                 },
-                name: "".to_owned(),
                 angle: 50.0,
             },
         ];
